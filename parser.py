@@ -12,12 +12,11 @@ def pars(url):
     browser.get(url)
     print(f"=====Страница {url}")
     # Задаём 3 секунды ожидания, чтобы веб-страница успела прогрузиться
-    time.sleep(10)
+    time.sleep(3)
 
     # Находим все карточки светильников с помощью названия класса
     # Названия класса берём с кода сайта
     svets = browser.find_elements(By.CSS_SELECTOR, 'div.lsooF')
-    print(f"===== {svets}")
 
     # Перебираем коллекцию светильников
     # Используем конструкцию try-except, чтобы "ловить" ошибки, как только они появляются
@@ -30,7 +29,6 @@ def pars(url):
             price = svet.find_element(By.CSS_SELECTOR, 'div.q5Uds').find_element(By.CSS_SELECTOR, 'span').text
             # Находим ссылку с помощью атрибута 'href'
             link = svet.find_element(By.CSS_SELECTOR, 'a').get_attribute('href')
-            print(f"=====Name {name}\nPrice {price}\nLink {link}")
         # Вставляем блок except на случай ошибки - в случае ошибки программа попытается продолжать
         except Exception as e:
             print(f"Произошла ошибка при парсинге: {e}")
@@ -38,7 +36,7 @@ def pars(url):
 
         # Вносим найденную информацию в список
         data.append([name, price, link])
-        print(f"=====Data {data}")
+
 
 # Инициализируем браузер
 browser = webdriver.Chrome()
@@ -51,13 +49,10 @@ data = []
 # Парсим первую страницу
 pars(url)
 
-# Модифицируем шаблон страниц, которые будем просматривать
-url += "/page-"
-
 # Цикл для парсинга остальных страниц
 for i in ['2', '3', '4', '5']:
     # Формируем адрес очередной страницы, которую будем просматривать
-    url += i
+    url = "https://divan.ru/category/svet/page-" + i
     # Парсим очередную страницу
     pars(url)
 
